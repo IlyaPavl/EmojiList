@@ -83,4 +83,36 @@ class EmojiTableViewController: UITableViewController {
         objects.insert(movedEmoji, at: destinationIndexPath.row)
         tableView.reloadData()
     }
+    
+    // реализуем метод для того, чтобы свайпать слева направо и выполнять какие-то действия (ставить лайк и чекмарк ячейку)
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let done = doneAction(at: indexPath)
+        let like = favouriteAction(at: indexPath)
+        return UISwipeActionsConfiguration(actions: [done, like])
+    }
+    
+    // метод done
+    func doneAction(at indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .destructive, title: "Done") { (action, view, completion) in
+            self.objects.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            completion(true)
+        }
+        action.backgroundColor = .systemGreen
+        action.image = UIImage(systemName: "checkmark.circle")
+        return action
+    }
+    
+    // метод для лайка (аналогично done, но с некоторыми твиками)
+    func favouriteAction(at indexPath: IndexPath) -> UIContextualAction {
+        var object = objects[indexPath.row]
+        let action = UIContextualAction(style: .normal, title: "Like") { (action, view, completion) in
+            object.isFavourite = !object.isFavourite
+            self.objects[indexPath.row] = object
+            completion(true)
+        }
+        action.backgroundColor = object.isFavourite ? .systemRed : .systemGray
+        action.image = UIImage(systemName: "heart")
+        return action
+    }
 }
