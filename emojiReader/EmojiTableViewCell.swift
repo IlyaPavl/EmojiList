@@ -18,6 +18,7 @@ class EmojiTableViewCell: UITableViewCell {
         // Initialization code
     }
     
+    // функция, которая задает значения лейблам
     func set(object: Emoji) {
         // пишем self в начале кода, так как мы находимся в "настройке" самой ячейки
         self.emoji.text = object.emoji

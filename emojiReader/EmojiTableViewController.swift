@@ -9,7 +9,7 @@ import UIKit
 
 class EmojiTableViewController: UITableViewController {
     
-    let objects = [
+    var objects = [
         Emoji(emoji: "🫶🏼", name: "Love", description: "Let's love each other", isFavourite: false),
         Emoji(emoji: "⚽️", name: "Football", description: "Let's play football together", isFavourite: false),
         Emoji(emoji: "🐈", name: "Cat", description: "Cat is the cutest animal", isFavourite: false),
@@ -49,56 +49,38 @@ class EmojiTableViewController: UITableViewController {
         // с помощью indexPath вытаскиваем из objects конкретный элемент в ячейке..
         let object = objects[indexPath.row]
         
-        // ..это необходимо, чтобы затем обратиться к данным из массива. Прописываем это в отдельно ViewCell
+        // ..это необходимо, чтобы затем обратиться к данным из массива. Прописываем реализацию в EmojiTableViewCell
         cell.set(object: object)
         
         return cell
     }
     
+    // реализуем метод, чтобы можно было удалять элементы из списка (данный метод можно не писать, так как он имплементирован по умолчанию)
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
     
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
+    // непосредственно реализуем удаление элементов из массива и из View
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            objects.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
     
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
+    // реализуем возможность двигать объекты с помощью соответствующего элемента интерфейса - в данном методе просто показываем клавишу передвижения
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
+    // в данном методе прописываем логику того, как происходит перемещение элементов
     
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        // создаем свойство, в которое запишем объект, который хотим переместить
+        let movedEmoji = objects.remove(at: sourceIndexPath.row)
+        
+        // Вставляем перемещаемый объект в новую позицию
+        objects.insert(movedEmoji, at: destinationIndexPath.row)
+        tableView.reloadData()
+    }
 }
