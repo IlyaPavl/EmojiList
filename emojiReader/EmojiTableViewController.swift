@@ -21,7 +21,25 @@ class EmojiTableViewController: UITableViewController {
         super.viewDidLoad()
         // Uncomment the following line to display an Edit button in the navigation bar fhr this view controller.
         self.title = "Emoji Reader"
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
+    }
+    
+    // для того, чтобы по нажатию кнопок Cancel иил Save со второго экрана возвращаться назад напишем функцию segue
+    @IBAction func unwindSegue(segue: UIStoryboardSegue) {
+        guard segue.identifier == "saveSegue" else {return}
+        
+        // чтобы добраться до свойств экрана 2 необходимо обратиться к этому экрану через свойство и затем взять с помощью этого свойства остальные свойства экрана 2
+        let sourceVC = segue.source as! NewEmojiTableViewController
+        let emoji = sourceVC.emoji
+        
+        // создаем свойство, которое будет создавать новый путь до добавленного объекта
+        let newIndexPath = IndexPath(row: objects.count, section: 0)
+        
+        // добавляем объект в массив
+        objects.append(emoji)
+        
+        // обновляем основную таблицу (экран)
+        tableView.insertRows(at: [newIndexPath], with: .fade)
     }
     
     // MARK: - Table view data source
