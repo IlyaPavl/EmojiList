@@ -19,8 +19,8 @@ class NewEmojiTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        updateUI()
         updateSaveButtonState()
-
     }
     
     // функция для того, чтобы кнопка save была неактвиной пока все три тектсовых поля не заполнятся
@@ -31,6 +31,14 @@ class NewEmojiTableViewController: UITableViewController {
         
         saveButton.isEnabled = !emojiText.isEmpty && !nameText.isEmpty && !descriptionText.isEmpty
     }
+    
+    // функция, с помощью которой будет обновляться интерфейс
+    private func updateUI() {
+        emojiTextField.text = emoji.emoji
+        nameTextField.text = emoji.name
+        descriptionTextField.text = emoji.description
+    }
+    
     
     @IBAction func textChanged(_ sender: UITextField) {
         updateSaveButtonState()
