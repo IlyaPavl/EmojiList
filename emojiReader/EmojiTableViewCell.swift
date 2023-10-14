@@ -15,12 +15,9 @@ class EmojiTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
-    // функция, которая задает значения лейблам
     func set(object: Emoji) {
-        // пишем self в начале кода, так как мы находимся в "настройке" самой ячейки
         self.emoji.text = object.emoji
         self.nameLabel.text = object.name
         self.descriptionLabel.text = object.description

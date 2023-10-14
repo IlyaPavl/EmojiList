@@ -23,7 +23,6 @@ class NewEmojiTableViewController: UITableViewController {
         updateSaveButtonState()
     }
     
-    // функция для того, чтобы кнопка save была неактвиной пока все три тектсовых поля не заполнятся
     private func updateSaveButtonState() {
         let emojiText = emojiTextField.text ?? ""
         let nameText = nameTextField.text ?? ""
@@ -32,7 +31,6 @@ class NewEmojiTableViewController: UITableViewController {
         saveButton.isEnabled = !emojiText.isEmpty && !nameText.isEmpty && !descriptionText.isEmpty
     }
     
-    // функция, с помощью которой будет обновляться интерфейс
     private func updateUI() {
         emojiTextField.text = emoji.emoji
         nameTextField.text = emoji.name
@@ -44,18 +42,15 @@ class NewEmojiTableViewController: UITableViewController {
         updateSaveButtonState()
     }
     
-    // данная функция используется, чтобы подготовить данные при переходе на главный экран приложения
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
         guard segue.identifier == "saveSegue" else {return}
         
-        // создаем эти константы, чтобы забрать данные из текстовых полей
         let emoji = emojiTextField.text ?? ""
         let name = nameTextField.text ?? ""
         let description = descriptionTextField.text ?? ""
         
-        //далее обновляем переменную с новыми данными
         self.emoji = Emoji(emoji: emoji, name: name, description: description, isFavourite: self.emoji.isFavourite)
     }
 }
